@@ -1,3 +1,7 @@
 #run this with bash update-modules
-npm install ../collision --save
+cd ../collision/bindings && node-gyp configure build &&
+cd ../../physics/bindings && node-gyp configure build &&
+cd ../../GameSync &&
+npm install ../collision &&
+npm install ../physics 
 

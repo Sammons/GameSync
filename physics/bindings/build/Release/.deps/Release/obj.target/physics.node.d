@@ -1,0 +1,1 @@
+cmd_Release/obj.target/physics.node := flock ./Release/linker.lock g++ -shared -pthread -rdynamic -m64  -Wl,-soname=physics.node -o Release/obj.target/physics.node -Wl,--start-group Release/obj.target/physics/physics.o -Wl,--end-group 
