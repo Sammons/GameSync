@@ -65,7 +65,6 @@ INCS_Release := \
 
 OBJS := \
 	$(obj).target/$(TARGET)/collision.o \
-	$(obj).target/$(TARGET)/src/dumb_collision.o \
 	$(obj).target/$(TARGET)/src/collision_system.o
 
 # Add to the list of files we specially track dependencies for.

@@ -1,3 +1,5 @@
+#include "commonheaders.h"
+#include "config.h"
 
 class dumb_collision
 {
@@ -7,6 +9,8 @@ public:
 	int add_segment(double x, double y, int parent, int number);//i.e. parent 1, segment 2
 	int update_segment(double x, double y, int parent, int number);
 	void remove_segment(int parent, int number);
+	int move_segment(double x, double y, int parent, int number);
 private:
+
 
 };

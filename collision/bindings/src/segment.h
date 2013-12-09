@@ -1,9 +1,15 @@
+#pragma once
+#include "commonheaders.h"
+class owner;
+class partition;
 class segment
 {
 public:
 	segment();
 	~segment();
-	owner* intersects(segment* s);
-	void move(double x, double y);
+	owner* move(double x, double y);
 	/* data */
+private:
+	int numPartitions;
+	partition* partitions;
 };
