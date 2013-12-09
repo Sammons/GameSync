@@ -1,0 +1,1 @@
+cmd_Release/obj.target/collision.node := flock ./Release/linker.lock g++ -shared -pthread -rdynamic -m64  -Wl,-soname=collision.node -o Release/obj.target/collision.node -Wl,--start-group Release/obj.target/collision/collision.o -Wl,--end-group 

@@ -1,0 +1,21 @@
+body {
+	padding: 0px;
+	margin: 0px;
+	background-color: grey;
+}
+
+.w8 {
+	width:800px;
+}
+.w5 {
+	width:500px;
+}
+.center {
+	margin: auto;
+}
+
+#stage {
+	width: 500px;
+	height: 500px;
+	border: 1px solid black;
+}

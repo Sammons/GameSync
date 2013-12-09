@@ -1,0 +1,14 @@
+{
+  "name": "GameSync",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.6",
+    "jade": "*",
+    "ws": "~0.4.31",
+    "collision": "0.0.0"
+  }
+}
