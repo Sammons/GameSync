@@ -1,0 +1,3 @@
+#run this with bash update-modules
+npm install ../collision --save
+
