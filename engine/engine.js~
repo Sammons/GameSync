@@ -1,0 +1,2 @@
+var collision = require('./bindings/build/Release/engine');
+

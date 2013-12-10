@@ -1,0 +1,3 @@
+cd bindings &&
+node-gyp configure build &&
+cd ..
