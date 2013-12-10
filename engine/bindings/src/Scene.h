@@ -37,5 +37,5 @@ private:
 	std::vector<Segment*> PathFragments;
 	std::vector<Shape*> Shapes;
 	std::vector<PreCollision*> PreCollisions;
-	std::vector<Collision*> Collisions;
+	std::vector<int> Collisions;
 };

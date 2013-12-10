@@ -18,8 +18,8 @@ engine.initialize(500,500,0,1000,function() {
  i.y = 7.5;
  i.angle = 0;
  addShape(i);
- i.x = 35;
- i.y = 35;
+ i.x = 50;
+ i.y = 7.5;
  addShape(i);
 // 	//create object
 // 	engine.addShape(shape.id,shape.x,shape.y,shape.onCollision);

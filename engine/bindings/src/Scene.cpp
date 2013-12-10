@@ -24,14 +24,14 @@ Scene::~Scene() {
 		delete(this->Shapes[i]);
 		this->Shapes[i] = NULL;
 	}
-	for (i = 0; i < Collisions.size(); ++i) {
-		delete(this->Collisions[i]);
-		this->Collisions[i] = NULL;
-	}
-	for (i = 0; i < PreCollisions.size(); ++i) {
-		delete(this->PreCollisions[i]);
-		this->PreCollisions[i] = NULL;
-	}
+	// for (i = 0; i < Collisions.size(); ++i) {
+	// 	delete(this->Collisions[i]);
+	// 	this->Collisions[i] = NULL;
+	// }
+	// for (i = 0; i < PreCollisions.size(); ++i) {
+	// 	delete(this->PreCollisions[i]);
+	// 	this->PreCollisions[i] = NULL;
+	// }
 }
 
 void Scene::tick(int times) {
@@ -39,12 +39,12 @@ void Scene::tick(int times) {
 	{
 		this->time++;
 		unsigned int j;
-		for (j = 0; j < this->Collisions.size(); ++j) {
-			this->Collisions[i]->decrement();
-		}
-		for (j = 0; j < this->PreCollisions.size(); ++j) {
-			this->PreCollisions[i]->decrement();
-		}
+		// for (j = 0; j < this->Collisions.size(); ++j) {
+		// 	this->Collisions[i]->decrement();
+		// }
+		// for (j = 0; j < this->PreCollisions.size(); ++j) {
+		// 	this->PreCollisions[i]->decrement();
+		// }
 	}
 }
 
@@ -58,6 +58,7 @@ void Scene::addShape(Shape* shape) {
 void Scene::checkShape(Shape* shape) {
 	printf("%s %f,%f\n", "performing initial check for collisions at position",shape->getPosition(this->time)->x, shape->getPosition(this->time)->y);
 	std::vector<Segment*> currentField = shape->getField(time);
+	int s = this->Collisions.size();
 	for (unsigned int i = 0; i < currentField.size(); ++i)
 	{
 		printf("%d %f,%f %f,%f\n",currentField.size(),currentField[i]->pos1->x,currentField[i]->pos1->y, currentField[i]->pos2->x,currentField[i]->pos2->y );
@@ -82,6 +83,12 @@ void Scene::shootRay(Shape* shape) {
 			shape->addToPath(Field[j]);
 		}
 	}
+		printf("Collision found for shape %d at times: ",shape->id );
+		for (int i = 0; i < Collisions.size(); ++i)
+		{
+			printf("%d ", Collisions[i]);
+		}
+		printf("\n");
 }
 
 long Scene::getTime() {

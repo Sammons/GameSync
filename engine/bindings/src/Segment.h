@@ -12,7 +12,7 @@ public:
 	void findCollisions(Shape* shape,
 	 std::vector<Segment*>* paths,
 	 std::vector<PreCollision*>* PreCollisions,
-	 std::vector<Collision*>* Collisions);
+	 std::vector<int>* Collisions);
 	Coord* pos1;
 	Coord* pos2;
 	long time;

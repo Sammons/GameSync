@@ -36,7 +36,7 @@ Coord* Coord::clone() {
 }
 
 double Coord::det(Coord* c) {
-	return this->x*c->y-this->y*c->x;
+	return (this->x)*(c->y)-(this->y)*(c->x);
 }
 
 void Coord::applyAngle(double angle) {

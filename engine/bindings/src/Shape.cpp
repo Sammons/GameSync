@@ -6,7 +6,7 @@ Shape::Shape(double x, double y, double angle,long time,int id, Local<Function> 
 	Coord* orientationVector = (new Coord(0,1));
 	orientationVector->applyAngle(angle);
 	this->orientationVector = orientationVector;
-	this->motionVector = new Coord(0,-id);
+	this->motionVector = new Coord(0,0);
 	this->motionAngle = 0;
 	this->collisionHandler = collisionHandler;
 	this->id = id;

@@ -21,22 +21,16 @@ Segment::~Segment() {
 void Segment::findCollisions(Shape* shape,
 	 std::vector<Segment*>* paths,
 	 std::vector<PreCollision*>* PreCollisions,
-	 std::vector<Collision*>* Collisions) {
-	std::vector<int> collisions;
+	 std::vector<int>* collisions) {
 	for (unsigned int i = 0; i < paths->size(); ++i)
 	{
 		if (this->intersects((*paths)[i])) {
-			if (!(std::find(collisions.begin(), collisions.end(), (*paths)[i]->owner) != collisions.end())) {
-				collisions.push_back((*paths)[i]->owner);
+			if (!(std::find(collisions->begin(), collisions->end(), (*paths)[i]->time) != collisions->end())) {
+				collisions->push_back((*paths)[i]->time);
 			}
 		}
 	}
-	if (collisions.size() > 0 ) printf("shape %d collides with ", this->owner);
-	for (int i = 0; i < collisions.size(); ++i)
-	{
-		printf("%d ",collisions[i]);
-	}
-	if (collisions.size() > 0 ) printf("\n");
+	
 }
 
 bool Segment::intersects(Segment* seg) {
@@ -54,6 +48,6 @@ bool Segment::intersects(Segment* seg) {
 	delete(p2);
 	delete(p1);
 	delete(p3);
-	if ((result1 > 0 && result2 < 0) || (result1 <0 && result2 >0) || (result1 ==0 || result2==0)) return true;
+	if ((result1 > 0 && result2 < 0) || (result1 <0 && result2 >0)) return true;
 	return false; 
 }
