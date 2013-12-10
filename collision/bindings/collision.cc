@@ -19,8 +19,25 @@ Handle<Value> Destroy(const Arguments& args) {
 Handle<Value> MoveSegment(const Arguments& args) {
 	HandleScope scope;
 	int id = -2;
-	//int move_segment(double x, double y, int parent, int number);
-	//id = collision->move_segment();
+	double angle = 0;
+	if (args.Length() == 4) {
+		id = collision->move_segment((double)args[0]->NumberValue(),
+			(double)args[1]->NumberValue(),
+			(double)args[2]->NumberValue(),
+			(double)args[3]->NumberValue());
+	} else if (args.Length() == 5){
+		Local<Function> cb = Local<Function>::Cast(args[4]);
+		const unsigned argc = 2;
+		collision->move_segment((double)args[0]->NumberValue(),
+			(double)args[1]->NumberValue(),
+			(double)args[2]->NumberValue(),
+			(double)args[3]->NumberValue(),
+			&id,
+			&angle);	
+		Local<Value> argv[argc] = {Local<Value>::New(Number::New(id)),
+									Local<Value>::New(Number::New(angle))};
+		cb->Call(Context::GetCurrent()->Global(),argc,argv);
+	}
 	return scope.Close(Number::New(id));
 }
 

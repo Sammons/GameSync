@@ -11,3 +11,20 @@ int dumb_collision::move_segment(double x, double y, int parent, int number) {
 	if (y < 0 || y > mapHeight-1) return 0;
 	return -1;
 }
+void dumb_collision::move_segment(double x, double y, int parent, int number,int* collidedWith, double* angle) {
+	if (x < 0) {
+		*collidedWith = 0;
+		*angle = (3.141/4);
+	} else if (x > mapWidth-1) {
+		*collidedWith = 0;
+		*angle = -(3.141/4);
+	} else if (y < 0) {
+		*collidedWith = 0;
+		*angle = 0;
+	} else if (y > mapHeight-1) {
+		*collidedWith = 0;
+		*angle = 0;
+	} else {
+		*collidedWith = -1;
+	}
+}

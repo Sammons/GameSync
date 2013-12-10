@@ -10,6 +10,7 @@ public:
 	int update_segment(double x, double y, int parent, int number);
 	void remove_segment(int parent, int number);
 	int move_segment(double x, double y, int parent, int number);
+	void move_segment(double x, double y, int parent, int number,int* collidedWith, double* angle);
 private:
 
 
