@@ -8,6 +8,7 @@ Scene* world;
 int id;
 Handle<Value> Initialize(const Arguments& args) {
 	HandleScope scope;
+	id = 0;
 	double mapHeight = (args[0]->IsNumber()?(double)args[0]->NumberValue():500);
 	double mapWidth = (args[1]->IsNumber()?(double)args[1]->NumberValue():500);
 	int boundaryType = (args[2]->IsNumber()?(int)args[2]->NumberValue():BOUNDARY_BLOCKING);
@@ -33,10 +34,10 @@ Handle<Value> AddShape(const Arguments& args) {
 	double y1 = (double)args[1]->NumberValue();
 	double angle = (double)args[2]->NumberValue();
 	Local<Function> collisionHandler = Local<Function>::Cast(args[3]);
-	world->addShape((new Shape(x1,y1,angle,world->getTime(),collisionHandler)));
+	world->addShape((new Shape(x1,y1,angle,world->getTime(),id,collisionHandler)));
 	Local<Function> cb = Local<Function>::Cast(args[4]);
 	const unsigned argc = 1;
-	id++;
+	id = id + 1;
 	Local<Value> argv[argc] = {Local<Value>::New(Number::New(id))};
 	cb->Call(Context::GetCurrent()->Global(), argc, argv);
 	return scope.Close(argv[0]);

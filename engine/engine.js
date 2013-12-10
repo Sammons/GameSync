@@ -1,6 +1,6 @@
 var engine = require('./bindings/build/Release/engine');
 
-engine.initialize(500,500,0,100,function() {
+engine.initialize(500,500,0,1000,function() {
 //cleanup
 });
 
@@ -10,12 +10,16 @@ engine.initialize(500,500,0,100,function() {
  	};
  	engine.addShape(shape.x,shape.y,0,collisionHandler,function(id) {
  		shape.id = id;
+ 		console.log("shape added ",id);
  	});
  }
  var i = {};
- i.x = 0;
- i.y = 1;
+ i.x = 7.5;
+ i.y = 7.5;
  i.angle = 0;
+ addShape(i);
+ i.x = 35;
+ i.y = 35;
  addShape(i);
 // 	//create object
 // 	engine.addShape(shape.id,shape.x,shape.y,shape.onCollision);

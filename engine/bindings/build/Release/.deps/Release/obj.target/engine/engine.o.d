@@ -10,8 +10,9 @@ Release/obj.target/engine/engine.o: ../engine.cc \
  /home/ben/.node-gyp/0.10.22/src/node_object_wrap.h \
  /home/ben/.node-gyp/0.10.22/src/node.h .././src/common.h \
  .././src/Scene.cpp .././src/Scene.h .././src/Collision.h \
- .././src/PreCollision.h .././src/Segment.h .././src/Shape.cpp \
- .././src/Shape.h .././src/Coord.cpp .././src/Coord.h
+ .././src/PreCollision.h .././src/Coord.cpp .././src/Coord.h \
+ .././src/Segment.cpp .././src/Segment.h .././src/Shape.cpp \
+ .././src/Shape.h
 ../engine.cc:
 /home/ben/.node-gyp/0.10.22/src/node.h:
 /home/ben/.node-gyp/0.10.22/deps/uv/include/uv.h:
@@ -27,8 +28,9 @@ Release/obj.target/engine/engine.o: ../engine.cc \
 .././src/Scene.h:
 .././src/Collision.h:
 .././src/PreCollision.h:
+.././src/Coord.cpp:
+.././src/Coord.h:
+.././src/Segment.cpp:
 .././src/Segment.h:
 .././src/Shape.cpp:
 .././src/Shape.h:
-.././src/Coord.cpp:
-.././src/Coord.h:

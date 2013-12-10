@@ -1,7 +1,8 @@
 #include "common.h"
 #include "Collision.h"
 #include "PreCollision.h"
-#include "Segment.h"
+#include "Coord.cpp"
+#include "Segment.cpp"
 #include "Shape.cpp"
 
 class Scene

@@ -52,25 +52,35 @@ void Scene::addShape(Shape* shape) {
 	printf("%s\n", "adding shape to scene");
 	this->checkShape(shape);
 	this->Shapes.push_back(shape);
+	printf("%s%s\n", "added shape with properties:", shape->ToString());
 };
 
 void Scene::checkShape(Shape* shape) {
-	Segment* currentFragment = shape->getRaySegment(time);
-	currentFragment->findCollisions(shape, &(this->PathFragments), &(this->PreCollisions), &(this->Collisions));
-	this->PathFragments.push_back(currentFragment);
+	printf("%s %f,%f\n", "performing initial check for collisions at position",shape->getPosition(this->time)->x, shape->getPosition(this->time)->y);
+	std::vector<Segment*> currentField = shape->getField(time);
+	for (unsigned int i = 0; i < currentField.size(); ++i)
+	{
+		printf("%d %f,%f %f,%f\n",currentField.size(),currentField[i]->pos1->x,currentField[i]->pos1->y, currentField[i]->pos2->x,currentField[i]->pos2->y );
+		currentField[i]->findCollisions(shape, &(this->PathFragments), &(this->PreCollisions), &(this->Collisions));
+		this->PathFragments.push_back(currentField[i]);
+	}
 	this->shootRay(shape);	
 }
 
 //really its not a ray, its the predicted path
 void Scene::shootRay(Shape* shape) {
+	printf("%s%d%s\n", "predicting trajectory for the next ", this->predictionLength, " ticks");
+	//if (shape->getMotionVector()->equals(0,0))
 	for (int i = 1; i <= this->predictionLength; ++i)
 	{
 		//get the segment that represents a shape's delta for this tick
-		Segment* pathFragment = shape->getRaySegment(this->time+i);
+		std::vector<Segment*> Field = shape->getField(this->time+i);
 		//find precollisions and collisions
-		pathFragment->findCollisions(shape, &(this->PathFragments), &(this->PreCollisions), &(this->Collisions));
-		this->PathFragments.push_back(pathFragment);
-		shape->addToPath(pathFragment);
+		for (unsigned int j = 0; j < Field.size(); j++) {
+			Field[j]->findCollisions(shape, &(this->PathFragments), &(this->PreCollisions), &(this->Collisions));
+			this->PathFragments.push_back(Field[j]);
+			shape->addToPath(Field[j]);
+		}
 	}
 }
 

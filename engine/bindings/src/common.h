@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <algorithm>
 #include <vector>
 #include <string>
 #define BOUNDARY_BLOCKING 0//bounce off edge, registers as collision
