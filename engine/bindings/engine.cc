@@ -34,7 +34,7 @@ Handle<Value> AddShape(const Arguments& args) {
 	double y1 = (double)args[1]->NumberValue();
 	double angle = (double)args[2]->NumberValue();
 	Local<Function> collisionHandler = Local<Function>::Cast(args[3]);
-	world->addShape((new Shape(x1,y1,angle,world->getTime(),id,collisionHandler)));
+	world->addShape(Shape(x1,y1,angle,world->getTime(),id,collisionHandler));
 	Local<Function> cb = Local<Function>::Cast(args[4]);
 	const unsigned argc = 1;
 	id = id + 1;

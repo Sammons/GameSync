@@ -1,73 +1,70 @@
 #include "Shape.h"
 
-Shape::Shape(double x, double y, double angle,long time,int id, Local<Function> collisionHandler) {
-	this->position = new Coord(x,y);
-	this->orientationAngle = angle;
-	Coord* orientationVector = (new Coord(0,1));
-	orientationVector->applyAngle(angle);
-	this->orientationVector = orientationVector;
-	this->motionVector = new Coord(0,0);
-	this->motionAngle = 0;
+Shape::Shape(double x, double y, double angle,long time,int id, v8::Local<v8::Function> collisionHandler)
+	:position(x, y), orientationAngle(angle), orientationVector(0, 1), motionVector(0, 0), motionAngle(0), id(id) {
+
+	orientationVector.applyAngle(angle);
+
 	this->collisionHandler = collisionHandler;
-	this->id = id;
 }
 
 Shape::~Shape() {
 	
 }
 
-void Shape::addToPath(Segment* segment) {
+void Shape::addToPath(Segment segment) {
 	this->PathSegments.push_back(segment);
 }
 
-void Shape::handleCollision(const char* type) {
+void Shape::handleCollision(const std::string &type) {
 	const unsigned argc = 1;
-	Local<Value> argv[argc] = {Local<Value>::New(String::New(type))};
-	this->collisionHandler->Call(Context::GetCurrent()->Global(),argc, argv);
+	v8::Local<v8::Value> argv[argc] = {v8::Local<v8::Value>::New(v8::String::New(type.c_str()))};
+	this->collisionHandler->Call(v8::Context::GetCurrent()->Global(),argc, argv);
 }
 
-std::vector<Segment*> Shape::getField(long time) {
-	std::vector<Segment*> boundaries = drawBody(time, getPosition(time));
-	return boundaries;
+vector<Segment> Shape::getField(long time) const {
+	return drawBody(time);
 }
 
 //generates segments that define the collision body about a point that is the center of mass
-std::vector<Segment*> Shape::drawBody(long t, Coord* position) {
-	std::vector<Segment*> body;
-	//I am hardcoding this to be a square of sidelength 15 in the meantime
-	Coord* stroke = position->clone();
-	Coord* nextStroke = position->clone();
-	nextStroke->add(-7.5,7.5);//top left corner 
-	stroke->add(-7.5,-7.5);//bottom left corner
-	Segment* leftEdge = new Segment(stroke,nextStroke, t, this->id);
-	stroke->add(15,15);
-	Segment* topEdge = new Segment(nextStroke, stroke, t, this->id);
-	nextStroke->add(15,-15);
-	Segment* rightEdge = new Segment(stroke, nextStroke, t, this->id);
-	stroke->add(-15,-15);
-	Segment* bottomEdge = new Segment(nextStroke, stroke, t, this->id);
-	body.push_back(leftEdge);
-	body.push_back(topEdge);
-	body.push_back(rightEdge);
-	body.push_back(bottomEdge);
-	delete(stroke);
-	delete(nextStroke);
-	return body;
-}
-Coord* Shape::getPosition(long time) {
-	long deltaT = this->currentTime - time;
-	if (motionVector->equals(0,0)) return this->position;
-	//pretend there is only linear constant motion
-	Coord* newPosition = this->motionVector->clone();
-	newPosition->multiply(deltaT);
-	newPosition->add(this->position);
-	return newPosition;
+vector<Segment> Shape::drawBody(long time) const {
+	Coord position = getPosition(time);
+
+	return drawSquare(position, time, 15);
 }
 
-Coord* Shape::getMotionVector() {
+vector<Segment> Shape::drawSquare(Coord center, long time, int sideLength) const {
+	double sideOffset = sideLength / 2;
+	
+	//square drawn clockwise starting at the top left corner
+	Coord topLeft(position.x - sideOffset, position.y + sideOffset),
+		topRight(position.x + sideOffset, position.y + sideOffset),
+		bottomRight(position.x + sideOffset, position.y - sideOffset),
+		bottomLeft(position.x - sideOffset, position.y - sideOffset);
+
+	vector<Segment> body;
+
+	body.push_back(Segment(topLeft, topRight, time, id));
+	body.push_back(Segment(topRight, bottomRight, time, id));
+	body.push_back(Segment(bottomRight, bottomLeft, time, id));
+	body.push_back(Segment(bottomLeft, topLeft, time, id));
+	
+	return body;
+}
+
+Coord Shape::getPosition(long time) const {
+	if (motionVector == Coord(0, 0))
+		return this->position;
+
+	long deltaT = this->currentTime - time;
+	//pretend there is only linear constant motion
+	return position + (motionVector * deltaT);
+}
+
+Coord Shape::getMotionVector() {
 	return this->motionVector;
 }
 
-char* Shape::ToString() {
+std::string Shape::ToString() {
 	return " properties not implemented yet!\n";
 }

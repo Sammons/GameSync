@@ -1,44 +1,59 @@
 #include "Coord.h"
 
-Coord::Coord(double x, double y) {
-	this->x = x;
-	this->y = y;
+Coord::Coord(double x, double y): x(x), y(y) {
 }
 
 Coord::~Coord() {
 
 }
 
-void Coord::add(double x, double y) {
-	this->x = this->x+x;
-	this->y = this->y+y;
-}
-void Coord::add(Coord* coord) {
-	this->x = coord->x+this->x;
-	this->y = coord->y+this->y;
-}
-void Coord::subtract(Coord* coord) {
-	this->x = this->x - coord->x;
-	this->y = this->y - coord->y;
+Coord Coord::operator+(const Coord& coord) const {
+	return Coord(x + coord.x, y + coord.y);
 }
 
-void Coord::multiply(double x) {
-	this->x = this->x * x;
-	this->y = this->y * x;
+Coord& Coord::operator+=(const Coord& coord) {
+	x += coord.x;
+	y += coord.y;
+	return *this;
 }
 
-bool Coord::equals(double x, double y) {
-	if (this->x == x && this->y == y) return true;
-	return false;
-}
-Coord* Coord::clone() {
-	return new Coord(this->x, this->y);
+Coord Coord::operator-(const Coord& coord) const {
+	return Coord(x - coord.x, y - coord.y);
 }
 
-double Coord::det(Coord* c) {
-	return (this->x)*(c->y)-(this->y)*(c->x);
+Coord& Coord::operator-=(const Coord& coord) {
+	x -= coord.x;
+	y -= coord.y;
+	return *this;
+}
+
+Coord Coord::operator*(double scale_factor) const {
+	return Coord(x * scale_factor, y * scale_factor);
+}
+
+Coord& Coord::operator*=(double scale_factor) {
+	x *= scale_factor;
+	y *= scale_factor;
+	return *this;
+}
+
+Coord Coord::operator-() const {
+	return Coord(-x, -y);
+}
+
+bool Coord::operator==(const Coord& coord) const {
+	return (x == coord.x && y == coord.y);
+}
+
+bool Coord::operator!=(const Coord& coord) const {
+	return !(*this == coord);
 }
 
 void Coord::applyAngle(double angle) {
 
+}
+
+//Calculates the determinant of two Coordinates
+double Coord::det(const Coord& c) {
+	return (this->x)*(c.y)-(this->y)*(c.x);
 }
