@@ -316,8 +316,8 @@ ifeq ($(strip $(foreach prefix,$(NO_LOAD),\
 endif
 
 quiet_cmd_regen_makefile = ACTION Regenerating $@
-cmd_regen_makefile = cd $(srcdir); /usr/lib/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "--toplevel-dir=." -I/home/ben/Desktop/GameSync/engine/bindings/build/config.gypi -I/usr/lib/node_modules/node-gyp/addon.gypi -I/home/ben/.node-gyp/0.10.22/common.gypi "--depth=." "-Goutput_dir=." "--generator-output=build" "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/home/ben/.node-gyp/0.10.22" "-Dmodule_root_dir=/home/ben/Desktop/GameSync/engine/bindings" binding.gyp
-Makefile: $(srcdir)/../../../../../../usr/lib/node_modules/node-gyp/addon.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp $(srcdir)/../../../../.node-gyp/0.10.22/common.gypi
+cmd_regen_makefile = cd $(srcdir); /usr/lib/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "--toplevel-dir=." -I/home/ben/Desktop/GameSync/engine/bindings/build/config.gypi -I/usr/lib/node_modules/node-gyp/addon.gypi -I/home/ben/.node-gyp/0.10.23/common.gypi "--depth=." "-Goutput_dir=." "--generator-output=build" "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/home/ben/.node-gyp/0.10.23" "-Dmodule_root_dir=/home/ben/Desktop/GameSync/engine/bindings" binding.gyp
+Makefile: $(srcdir)/../../../../../../usr/lib/node_modules/node-gyp/addon.gypi $(srcdir)/../../../../.node-gyp/0.10.23/common.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp
 	$(call do_cmd,regen_makefile)
 
 # "all" is a concatenation of the "all" targets from all the included
