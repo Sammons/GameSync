@@ -1,7 +1,7 @@
 #include <node.h>
 #include <v8.h>
 #include "./src/common.h"
-#include "./src/Scene.cpp"
+#include "./src/Scene.h"
 using namespace v8;
 
 Scene* world;

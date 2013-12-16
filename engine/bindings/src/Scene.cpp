@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene(double mapHeight, double mapWidth, int boundaryType, int predictionLength, v8::Local<v8::Function> endCallback)
-	:EndCallback(endCallback), mapWidth(mapWidth), mapHeight(mapHeight), boundaryType(boundaryType), time(0), predictionLength(predictionLength) {
+	:time(0), mapHeight(mapHeight), mapWidth(mapWidth), boundaryType(boundaryType), predictionLength(predictionLength), EndCallback(endCallback) {
 
 }
 
@@ -24,7 +24,7 @@ void Scene::tick(int times) {
 	for (int i = 0; i < times; ++i)
 	{
 		time++;
-		unsigned int j;
+		// unsigned int j;
 		// for (j = 0; j < this->Collisions.size(); ++j) {
 		// 	this->Collisions[i]->decrement();
 		// }
@@ -44,10 +44,9 @@ void Scene::addShape(Shape shape) {
 void Scene::checkShape(Shape& shape) {
 	cout << "performing initial check for collisions at position (" << shape.getPosition(time).x << ", " << shape.getPosition(time).y << ")\n";
 	vector<Segment> currentField = shape.getField(time);
-	int s = this->Collisions.size();
 	for (const auto& seg : currentField)
 	{
-		printf("size: %d p1: (%d, %d) p2: (%d, %d)\n", currentField.size(), seg.pos1.x, seg.pos2.y, seg.pos2.x, seg.pos2.y);
+		printf("size: %lu p1: (%f, %f) p2: (%f, %f)\n", currentField.size(), seg.pos1.x, seg.pos2.y, seg.pos2.x, seg.pos2.y);
 		seg.findCollisions(shape, PathFragments, PreCollisions, Collisions);
 		this->PathFragments.push_back(seg);
 	}

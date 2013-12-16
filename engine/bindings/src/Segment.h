@@ -2,10 +2,10 @@
 
 #include "common.h"
 #include "Coord.h"
-#include "Shape.h"
 #include "PreCollision.h"
 #include "Collision.h"
 
+class Shape;
 class Segment
 {
 public:

@@ -3,9 +3,9 @@
 #include "common.h"
 #include "Collision.h"
 #include "PreCollision.h"
-#include "Coord.cpp"
-#include "Segment.cpp"
-#include "Shape.cpp"
+#include "Coord.h"
+#include "Segment.h"
+#include "Shape.h"
 
 class Scene
 {
@@ -26,11 +26,11 @@ private:
 	void shootRay(Shape& shape);
 
 	//physical properties of the world
-	long mapWidth;
-	long mapHeight;
-	int predictionLength;
-	int boundaryType;
 	unsigned long time;
+	long mapHeight;
+	long mapWidth;
+	int boundaryType;
+	int predictionLength;
 
 	//would be cool if a callback could be fired when everything ends
 	v8::Local<v8::Function> EndCallback;

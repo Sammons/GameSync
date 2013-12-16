@@ -30,7 +30,7 @@ void Segment::findCollisions(
 }
 
 bool Segment::intersects(const Segment& seg) const {
-	if (seg.time != this->time || this->owner == seg.owner && seg.time != -1) return false;
+	if (seg.time != this->time || (this->owner == seg.owner && seg.time != -1)) return false;
 	Coord p0 = this->pos1;
 	Coord p1 = this->pos2;
 	p1 -= p0;

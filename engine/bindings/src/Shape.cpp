@@ -1,11 +1,10 @@
 #include "Shape.h"
+#include "Segment.h"
 
-Shape::Shape(double x, double y, double angle,long time,int id, v8::Local<v8::Function> collisionHandler)
-	:position(x, y), orientationAngle(angle), orientationVector(0, 1), motionVector(0, 0), motionAngle(0), id(id) {
+Shape::Shape(double x, double y, double angle, long time, int id, v8::Local<v8::Function> collisionHandler)
+	:id(id), collisionHandler(collisionHandler), position(x, y), orientationAngle(angle), currentTime(time), orientationVector(0, 1), motionVector(0, 0), motionAngle(0)  {
 
 	orientationVector.applyAngle(angle);
-
-	this->collisionHandler = collisionHandler;
 }
 
 Shape::~Shape() {

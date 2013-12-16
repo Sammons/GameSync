@@ -2,13 +2,6 @@
 
 #include "common.h"
 
-enum class BoundaryBehavior
-{
-	Blocking, //bounce off edge, registers as collision
-	Sliding, //leave one side enter other
-	None //can leave map
-};
-
 class Coord
 {
 public:

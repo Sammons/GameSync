@@ -16,3 +16,7 @@ using std::weak_ptr;
 using std::cout;
 using std::cerr;
 using std::endl;
+
+#define BOUNDARY_BLOCKING 0//bounce off edge, registers as collision
+#define BOUNDARY_SLIDING 1//leave one side enter other
+#define BOUNDARY_NONE 2//can leave map
