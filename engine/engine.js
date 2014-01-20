@@ -1,26 +1,29 @@
 var engine = require('./bindings/build/Release/engine');
 
-engine.initialize(500,500,0,1000,function() {
-//cleanup
-});
+engine.addSegment();
 
- var addShape = function(shape) {
- 	var collisionHandler = function(type) {
- 		console.log("crap I hit something:", type);
- 	};
- 	engine.addShape(shape.x,shape.y,0,collisionHandler,function(id) {
- 		shape.id = id;
- 		console.log("shape added ",id);
- 	});
- }
- var i = {};
- i.x = 7.5;
- i.y = 7.5;
- i.angle = 0;
- addShape(i);
- i.x = 50;
- i.y = 7.5;
- addShape(i);
+
+// engine.initialize(500,500,0,1000,function() {
+// //cleanup
+// });
+
+//  var addShape = function(shape) {
+//  	var collisionHandler = function(type) {
+//  		console.log("crap I hit something:", type);
+//  	};
+//  	engine.addShape(shape.x,shape.y,0,collisionHandler,function(id) {
+//  		shape.id = id;
+//  		console.log("shape added ",id);
+//  	});
+//  }
+//  var i = {};
+//  i.x = 7.5;
+//  i.y = 7.5;
+//  i.angle = 0;
+//  addShape(i);
+//  i.x = 50;
+//  i.y = 7.5;
+//  addShape(i);
 // 	//create object
 // 	engine.addShape(shape.id,shape.x,shape.y,shape.onCollision);
 // 	//populate it
