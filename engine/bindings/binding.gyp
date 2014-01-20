@@ -63,7 +63,7 @@
 				"src/Box2D/Collision/Shapes/b2ChainShape.cpp",
 				"src/Box2D/Collision/Shapes/b2PolygonShape.cpp",
 				"src/Box2D/Collision/Shapes/b2CircleShape.cpp",
-				"src/Box2D/Collision/Shapes/b2EdgeShape.cpp",
+				"src/Box2D/Collision/Shapes/b2EdgeShape.cpp"
 			]
 		}
 	]

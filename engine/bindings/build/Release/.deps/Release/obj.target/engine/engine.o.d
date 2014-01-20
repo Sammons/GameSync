@@ -8,10 +8,10 @@ Release/obj.target/engine/engine.o: ../engine.cc \
  /home/catalyst/.node-gyp/0.10.24/deps/v8/include/v8.h \
  /home/catalyst/.node-gyp/0.10.24/deps/v8/include/v8stdint.h \
  /home/catalyst/.node-gyp/0.10.24/src/node_object_wrap.h \
- /home/catalyst/.node-gyp/0.10.24/src/node.h ../src/common.h \
- ../src/Box2D/Box2D.h ../src/Box2D/Common/b2Settings.h \
- ../src/Box2D/Common/b2Draw.h ../src/Box2D/Common/b2Math.h \
- ../src/Box2D/Common/b2Settings.h ../src/Box2D/Common/b2Timer.h \
+ /home/catalyst/.node-gyp/0.10.24/src/node.h ../src/Box2D/Box2D.h \
+ ../src/Box2D/Common/b2Settings.h ../src/Box2D/Common/b2Draw.h \
+ ../src/Box2D/Common/b2Math.h ../src/Box2D/Common/b2Settings.h \
+ ../src/Box2D/Common/b2Timer.h \
  ../src/Box2D/Collision/Shapes/b2CircleShape.h \
  ../src/Box2D/Collision/Shapes/b2Shape.h \
  ../src/Box2D/Collision/Shapes/../../Common/b2BlockAllocator.h \
@@ -66,9 +66,7 @@ Release/obj.target/engine/engine.o: ../engine.cc \
  ../src/Box2D/Dynamics/Joints/b2RevoluteJoint.h \
  ../src/Box2D/Dynamics/Joints/b2RopeJoint.h \
  ../src/Box2D/Dynamics/Joints/b2WeldJoint.h \
- ../src/Box2D/Dynamics/Joints/b2WheelJoint.h ../src/Scene.h \
- ../src/Collision.h ../src/PreCollision.h ../src/Coord.h ../src/Segment.h \
- ../src/Shape.h ../src/Box2D/Box2D.h
+ ../src/Box2D/Dynamics/Joints/b2WheelJoint.h
 ../engine.cc:
 /home/catalyst/.node-gyp/0.10.24/src/node.h:
 /home/catalyst/.node-gyp/0.10.24/deps/uv/include/uv.h:
@@ -79,7 +77,6 @@ Release/obj.target/engine/engine.o: ../engine.cc \
 /home/catalyst/.node-gyp/0.10.24/deps/v8/include/v8stdint.h:
 /home/catalyst/.node-gyp/0.10.24/src/node_object_wrap.h:
 /home/catalyst/.node-gyp/0.10.24/src/node.h:
-../src/common.h:
 ../src/Box2D/Box2D.h:
 ../src/Box2D/Common/b2Settings.h:
 ../src/Box2D/Common/b2Draw.h:
@@ -143,10 +140,3 @@ Release/obj.target/engine/engine.o: ../engine.cc \
 ../src/Box2D/Dynamics/Joints/b2RopeJoint.h:
 ../src/Box2D/Dynamics/Joints/b2WeldJoint.h:
 ../src/Box2D/Dynamics/Joints/b2WheelJoint.h:
-../src/Scene.h:
-../src/Collision.h:
-../src/PreCollision.h:
-../src/Coord.h:
-../src/Segment.h:
-../src/Shape.h:
-../src/Box2D/Box2D.h:
