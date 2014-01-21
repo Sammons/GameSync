@@ -70,10 +70,6 @@ INCS_Release := \
 
 OBJS := \
 	$(obj).target/$(TARGET)/engine.o \
-	$(obj).target/$(TARGET)/src/Coord.o \
-	$(obj).target/$(TARGET)/src/Scene.o \
-	$(obj).target/$(TARGET)/src/Segment.o \
-	$(obj).target/$(TARGET)/src/Shape.o \
 	$(obj).target/$(TARGET)/src/Box2D/Rope/b2Rope.o \
 	$(obj).target/$(TARGET)/src/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.o \
 	$(obj).target/$(TARGET)/src/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.o \

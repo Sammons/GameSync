@@ -11,13 +11,7 @@
 			"sources":
 			[
 				"engine.cc",
-				"src/Coord.cpp",
-				"src/Scene.cpp",
-				"src/Segment.cpp",
-				"src/Shape.cpp",
-				"src/Box2D/Rope",
 				"src/Box2D/Rope/b2Rope.cpp",
-				"src/Box2D/Dynamics/Contacts",
 				"src/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp",
 				"src/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp",
 				"src/Box2D/Dynamics/Contacts/b2PolygonContact.cpp",
