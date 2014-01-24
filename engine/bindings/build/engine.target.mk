@@ -31,9 +31,9 @@ CFLAGS_CC_Debug := \
 	-fno-exceptions
 
 INCS_Debug := \
-	-I/home/catalyst/.node-gyp/0.10.24/src \
-	-I/home/catalyst/.node-gyp/0.10.24/deps/uv/include \
-	-I/home/catalyst/.node-gyp/0.10.24/deps/v8/include
+	-I/home/catalyst/.node-gyp/0.10.25/src \
+	-I/home/catalyst/.node-gyp/0.10.25/deps/uv/include \
+	-I/home/catalyst/.node-gyp/0.10.25/deps/v8/include
 
 DEFS_Release := \
 	'-D_LARGEFILE_SOURCE' \
@@ -64,9 +64,9 @@ CFLAGS_CC_Release := \
 	-fno-exceptions
 
 INCS_Release := \
-	-I/home/catalyst/.node-gyp/0.10.24/src \
-	-I/home/catalyst/.node-gyp/0.10.24/deps/uv/include \
-	-I/home/catalyst/.node-gyp/0.10.24/deps/v8/include
+	-I/home/catalyst/.node-gyp/0.10.25/src \
+	-I/home/catalyst/.node-gyp/0.10.25/deps/uv/include \
+	-I/home/catalyst/.node-gyp/0.10.25/deps/v8/include
 
 OBJS := \
 	$(obj).target/$(TARGET)/engine.o \
