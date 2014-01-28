@@ -1,3 +1,114 @@
+
+function AssetManager(canvas) {
+	var zmax = 2;
+	var assets = {};
+	var canvas = canvas;
+	var context = canvas.getContext('2d');
+	var assetCounter = 0;
+	var renderRate = 75;
+	var rendering = true;
+	var renderQ = [];	
+
+	var renderLoop = setInterval(function() {
+		if (rendering) render();
+	},renderRate);
+
+	function paint() {
+		for (var j = 0; j < zmax; j++) {
+			for (var i in assets) {
+				if (assets[i].zindex == i || i==0) {
+					renderQ.push(assets[i].canvasCollection[i]);
+				}
+			}
+		}
+	}
+	function render() {
+		context.setTransform(1,0,0,1,0,0);
+		context.clearRect(0,0,canvas.width,canvas.height);
+		for (var i=0; i<renderQ.length; i++) {
+			for (var j = 0; j < renderQ[i].canvasCollection.length; j++) {
+				var currentCanvas = renderQ[i].canvasCollection[j];
+				context.drawImage(currentCanvas,currentCanvas.relativeX(),currentCanvas.relativeY());
+			};
+		}
+	}
+	function asset() {
+		this.assetId = assetCounter++;
+		this.canvasCollection = [];
+		this.repaint = function() {
+			for (var i = 0; i < this.canvasCollection.length; i++) {
+				storeCanvasAsset(this.canvasCollection[i]);
+			}
+		}
+		return this;
+	}
+	function start(context,point) {
+		context.moveTo(point.x,point.y);
+		context.beginPath();
+	}
+	function end(context,point) {
+		context.lineTo(point.x,point.y);
+		context.close();
+		context.fill();
+	}
+	function stroke(context,point) {
+		context.lineTo(point.x,point.y);
+	}
+	function min(array,func) {
+		var min = array[0];
+		for (var i = 0; i< array.length; i++) {
+			if (func(min,array[i])) min = array[i];
+		}
+		return min;
+	}
+	function max(array, func) {
+		var max = array[0];
+		for (var i = 0; i< array.length; i++) {
+			if (!func(max,array[i])) max = array[i];
+		}
+		return max;
+	}
+	function createMiniCanvas(width,height,asset) {
+		var newCanvas = document.createElement('canvas');
+		asset.canvasCollection.push(newCanvas);
+		newCanvas.parent = asset;
+		newCanvas.width = width;
+		newCanvas.height = height;
+		return newCanvas;
+	}
+	function createRectangleShape(width,height,asset,options) {
+		var newRectCanvas = createMiniCanvas(width,height,asset);
+		var newRectContext = newRectCanvas.getContext('2d');
+		if (options.fillStyle) newRectContext.fillStyle = options.fillStyle
+		newRectContext.fillStyle = (options.color ? options.color : 'blue');
+		newRectContext.fillRect(0,0,width,height);
+		return newRectCanvas;
+	}
+	function createPolygonShape(arrayOfPoints,asset, options){
+		var maxX = max(arrayOfPoints,function(a,b){return (a.x<b.x);});
+		var minX = min(arrayOfPoints,function(a,b){return (a.x<b.x);});
+		var maxY = max(arrayOfPoints,function(a,b){return (a.y<b.y);});
+		var minY = min(arrayOfPoints,function(a,b){return (a.y<b.y);});
+		var width = maxX-minX;
+		var height = maxY-minY;
+		var newPolyCanvas = createMiniCanvas(width,height,asset);
+		var newPolyContext = newPolyCanvas.getContext('2d');
+		if (options.fillStyle) newRectContext.fillStyle = options.fillStyle
+		start(newPolyContext,arrayOfPoints[0]);
+		for (var i = 1 ; i< arrayOfPoints.length-1; i++) {
+			stroke(newRectContext,arrayOfPoints[i]);
+		}
+		end(newPolyContext,arrayOfPoints[arrayOfPoints.length-1]);
+		return newPolyCanvas;
+	}
+	function createMultiShapeObject(arrayOfPointCollections, asset) {
+		for (var i = 0; i < arrayOfPointCollections.length; i++) {
+			createPolygonShape(arrayOfPointCollections[i],asset);
+		}
+		return asset;
+	}
+}
+
 $(document).ready(function() {
 	var socket = io.connect('http://localhost:3000');
 	var Settings = {};
@@ -32,3 +143,4 @@ $(document).ready(function() {
 		Context.fillRect(x,y,10,10);
 	}	
 })
+
