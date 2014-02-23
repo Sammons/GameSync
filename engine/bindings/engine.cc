@@ -1,9 +1,18 @@
 #include <node.h>
 #include <v8.h>
 #include "src/wrapper.h"
- #include <time.h>
+#include <time.h>
 //not sure what to call the adapter-lib between this file and the rest that interact/wrap Box
+#include <map>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+
 using namespace v8;
+
+b2World *world;
+std::map<std::string, b2Body*> bodies;
 
 void sleep(unsigned int mseconds)
 {
@@ -84,7 +93,6 @@ Handle<Value> HelloWorld(const Arguments& args) {
 
 		// Now print the position and angle of the body.
 		b2Vec2 position = body->GetPosition();
-		float32 angle = body->GetAngle();
 		Local<Value> argv[argc] = {Local<Value>::New(Number::New(position.y))};
 		cb->Call(Context::GetCurrent()->Global(), argc, argv);
 		//printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
@@ -96,7 +104,83 @@ Handle<Value> HelloWorld(const Arguments& args) {
 Handle<Value> CreateWorld(const Arguments& args) {
 	HandleScope scope;
 	//TODO want to return the world: http://nodejs.org/api/addons.html#addons_wrapping_c_objects
+	b2Vec2 gravity((Local<Number>::Cast(args[0]))->NumberValue(), (Local<Number>::Cast(args[1]))->NumberValue());
 
+	// // Construct a world object, which will hold and simulate the rigid bodies.
+	world = new b2World(gravity);
+	return scope.Close(Undefined());
+}
+Handle<Value> CreateDynamicBody(const Arguments& args) {
+	HandleScope scope;
+	//get x and y and object name
+	float x = (Local<Number>::Cast(args[0]))->NumberValue();
+	float y = (Local<Number>::Cast(args[1]))->NumberValue();
+	v8::String::Utf8Value arg1(args[2]->ToString());
+	std::string name = std::string(*arg1);
+
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(x, y);
+	b2Body* body = world->CreateBody(&bodyDef);
+	
+	bodies.insert(std::make_pair(name, body));
+	return scope.Close(Undefined());
+}
+
+Handle<Value> CreateFixedBody(const Arguments& args) {
+	HandleScope scope;
+	//get x and y and object name
+	float x = (Local<Number>::Cast(args[0]))->NumberValue();
+	float y = (Local<Number>::Cast(args[1]))->NumberValue();
+	v8::String::Utf8Value arg2(args[2]->ToString());
+	std::string name = std::string(*arg2);
+
+	b2BodyDef bodyDef;
+	bodyDef.position.Set(x, y);
+	b2Body* body = world->CreateBody(&bodyDef);
+	
+	bodies.insert(std::make_pair(name, body));
+	return scope.Close(Undefined());
+}
+//name, width, height, x, y, angle, density, friction, restitution
+Handle<Value> AttachDynamicBoxFixture(const Arguments& args) {
+	HandleScope scope;
+	//get height and width and object name
+	v8::String::Utf8Value arg0(args[0]->ToString());
+	std::string name = std::string(*arg0);
+	float width 		= (Local<Number>::Cast(args[1]))->NumberValue();
+	float height 		= (Local<Number>::Cast(args[2]))->NumberValue();
+	float x 			= (Local<Number>::Cast(args[3]))->NumberValue();
+	float y 			= (Local<Number>::Cast(args[4]))->NumberValue();
+	float theta 		= (Local<Number>::Cast(args[5]))->NumberValue();
+	float density 		= (Local<Number>::Cast(args[6]))->NumberValue();
+	float friction 		= (Local<Number>::Cast(args[7]))->NumberValue();
+	float restitution 	= (Local<Number>::Cast(args[8]))->NumberValue();
+	
+	bool collidable = true;
+	
+	auto bodies_iterator = bodies.find(name);
+	
+	if (bodies_iterator != bodies.end()) {
+		//get the body to attach to
+		auto body = bodies_iterator->second;//first is the string, second is the body
+
+		//create the shape
+		b2PolygonShape box;
+		box.SetAsBox(width/2, height/2, b2Vec2(x,y), theta);//divide by two since this takes half widths
+		
+		//frame up the fixture definition
+		b2FixtureDef boxFixtureDefinition;
+
+		boxFixtureDefinition.shape 			= &box;
+		boxFixtureDefinition.density 		= density;
+		boxFixtureDefinition.friction 		= friction;
+		boxFixtureDefinition.restitution 	= restitution;
+		boxFixtureDefinition.isSensor 		= collidable;
+		
+		//attach the fixture
+		body->CreateFixture(&boxFixtureDefinition);
+	}
 	return scope.Close(Undefined());
 }
 
@@ -104,8 +188,14 @@ Handle<Value> CreateWorld(const Arguments& args) {
 void init(Handle<Object> exports) {
 	exports->Set(String::NewSymbol("HelloWorld"),
 		FunctionTemplate::New(HelloWorld)->GetFunction());
+
 	exports->Set(String::NewSymbol("CreateWorld"),
 		FunctionTemplate::New(CreateWorld)->GetFunction());
+
+	exports->Set(String::NewSymbol("CreateDynamicBody"),
+		FunctionTemplate::New(CreateDynamicBody)->GetFunction());
+	exports->Set(String::NewSymbol("AttachBoxFixture"),
+		FunctionTemplate::New(AttachBoxFixture)->GetFunction());
 }
 
 NODE_MODULE(engine,init)

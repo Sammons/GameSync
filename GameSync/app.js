@@ -4,9 +4,9 @@ var engine			= require('../engine/engine.js');
 process.nextTick(function() {
 	setTimeout(function() {
 		engine.HelloWorld(function(num) {
-			socketServer.broadcast({'x':num*50-50, 'y':0+40});
+			socketServer.broadcast({'y':-num*50+500, 'x':0+40});
 		});
-	},1000)
+	},2000)
 });
 
 
