@@ -183,7 +183,18 @@ Handle<Value> AttachDynamicBoxFixture(const Arguments& args) {
 	}
 	return scope.Close(Undefined());
 }
-
+Handle<Value> Tick(const Arguments& args) {
+	HandleScope scope;
+	// It is generally best to keep the time step and iterations fixed.
+	// Prepare for simulation. Typically we use a time step of 1/60 of a
+	// second (60Hz) and 10 iterations. This provides a high quality simulation
+	// in most game scenarios.
+	float32 timeStep = 1.0f / 60.0f;
+	int32 velocityIterations = 6;
+	int32 positionIterations = 2;
+	world->Step(timeStep, velocityIterations, positionIterations);
+	return scope.Close(Undefined());
+}
 
 void init(Handle<Object> exports) {
 	exports->Set(String::NewSymbol("HelloWorld"),
@@ -195,7 +206,7 @@ void init(Handle<Object> exports) {
 	exports->Set(String::NewSymbol("CreateDynamicBody"),
 		FunctionTemplate::New(CreateDynamicBody)->GetFunction());
 	exports->Set(String::NewSymbol("AttachBoxFixture"),
-		FunctionTemplate::New(AttachBoxFixture)->GetFunction());
+		FunctionTemplate::New(AttachDynamicBoxFixture)->GetFunction());
 }
 
 NODE_MODULE(engine,init)

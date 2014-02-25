@@ -28,6 +28,12 @@ exports.createBox = function(posX,posY,friction,density) {
 
 engine.CreateWorld();
 //x,y,name
-engine.CreateDynamicBody(10,10,'ok');
+engine.CreateDynamicBody(10,10,'ok',function(x,y) {
+	this.x = x;
+	this.y = y;
+	console.log('update')
+});
 //name, width, height, x, y, angle, density, friction, restitution;
 engine.AttachBoxFixture('ok',5,5,0,0,0,1,0.3,0.1);
+
+engine.tick();
