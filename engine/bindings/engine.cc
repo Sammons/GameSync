@@ -103,10 +103,9 @@ Handle<Value> HelloWorld(const Arguments& args) {
 // gravity vector?
 Handle<Value> CreateWorld(const Arguments& args) {
 	HandleScope scope;
-	//TODO want to return the world: http://nodejs.org/api/addons.html#addons_wrapping_c_objects
 	b2Vec2 gravity((Local<Number>::Cast(args[0]))->NumberValue(), (Local<Number>::Cast(args[1]))->NumberValue());
 
-	// // Construct a world object, which will hold and simulate the rigid bodies.
+	// Construct a world object, which will hold and simulate the rigid bodies.
 	world = new b2World(gravity);
 	return scope.Close(Undefined());
 }

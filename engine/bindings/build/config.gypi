@@ -9,7 +9,7 @@
   },
   "variables": {
     "clang": 0,
-    "gcc_version": 47,
+    "gcc_version": 48,
     "host_arch": "x64",
     "node_install_npm": "true",
     "node_prefix": "/usr",
@@ -31,7 +31,7 @@
     "v8_enable_gdbjit": 0,
     "v8_no_strict_aliasing": 1,
     "v8_use_snapshot": "false",
-    "nodedir": "/home/chasm/.node-gyp/0.10.25",
+    "nodedir": "/home/catalyst/.node-gyp/0.10.26",
     "copy_dev_lib": "true",
     "standalone_static_library": 1
   }
