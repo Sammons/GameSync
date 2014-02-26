@@ -1,7 +1,7 @@
 var engine = require('./bindings/build/Release/engine');
 engine.bodies = [];
 
-function createWorld = function(gravityX, gravityY){
+function createWorld (gravityX, gravityY){
 	engine.CreateWorld();
 };
 
@@ -10,18 +10,19 @@ function createFixedBody( posX, posY, entity ) {
 	engine.CreateDynamicBody( posX, posY);	
 }
 
-function createDynamicBody( posX, posY, entity ) {
+function createDynamicBody(entity ) {
 
 	engine.CreateDynamicBody(
-	 posX,
-	 posY,
+	 entity.pos.x,
+	 entity.pos.y,
 	 entity.name,
-	 function () {
-	 	for (var i = entity.listeners.create.length - 1; i >= 0; i--) {
-	 		entity.listeners.create[i]();
-	 	};
-	 },
+	 // function () {
+	 // 	for (var i = entity.listeners.create.length - 1; i >= 0; i--) {
+	 // 		entity.listeners.create[i]();
+	 // 	};
+	 // },
 	 function (x,y) {
+	 	console.log(x,y);
 	 	entity.pos.x = x;
 	 	entity.pos.y = y;
 	 	for (var i = entity.listeners.create.length - 1; i >= 0; i--) {
@@ -120,14 +121,19 @@ function Body(posX, posY, name, dynamic) {
 	}
 }
 
-// engine.CreateWorld();
-// //x,y,name
-// engine.CreateDynamicBody(10,10,'ok',function(x,y) {
-// 	this.x = x;
-// 	this.y = y;
-// 	console.log('update')
-// });
-// //name, width, height, x, y, angle, density, friction, restitution;
-// engine.AttachBoxFixture('ok',5,5,0,0,0,1,0.3,0.1);
+function Tick_Update() {
+	engine.Update();
+	engine.Tick();
+}
 
-// engine.tick();
+engine.CreateWorld();
+//x,y,name
+var newBox = new Body(5,5,'first',true);
+createDynamicBody(newBox);
+//name, width, height, x, y, angle, density, friction, restitution;
+//engine.AttachBoxFixture('ok',5,5,0,0,0,1,0.3,0.1);
+engine.AttachDynamicBoxFixture('first',5,5);
+
+for (var i = 500- 1; i >= 0; i--) {
+	Tick_Update();
+};

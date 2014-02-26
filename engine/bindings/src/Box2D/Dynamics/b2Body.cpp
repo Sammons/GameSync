@@ -21,6 +21,8 @@
 #include "b2World.h"
 #include "Contacts/b2Contact.h"
 #include "Joints/b2Joint.h"
+#include <v8.h>
+
 
 b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 {
@@ -521,7 +523,7 @@ void b2Body::SetFixedRotation(bool flag)
 void b2Body::Dump()
 {
 	int32 bodyIndex = m_islandIndex;
-
+	//TODO: update callback
 	b2Log("{\n");
 	b2Log("  b2BodyDef bd;\n");
 	b2Log("  bd.type = b2BodyType(%d);\n", m_type);
@@ -546,4 +548,23 @@ void b2Body::Dump()
 		b2Log("  }\n");
 	}
 	b2Log("}\n");
+}
+
+void b2Body::SetUpdateCallback(v8::Persistent<v8::Function> callback) {
+	m_updateCallback = callback;
+}
+
+void b2Body::UpdatePosition() const {
+	const b2Vec2 position = GetPosition();
+	const unsigned argc = 2;
+	//printf("%f,%f\n", position.x,position.y);
+	if (m_type != b2_dynamicBody) printf("%s\n", "uh oh");;
+	return;
+	v8::Persistent<v8::Value> argy[argc] = {
+		v8::Persistent<v8::Value>::New(v8::Number::New(position.x)),
+		v8::Persistent<v8::Value>::New(v8::Number::New(position.y))
+	};
+	argy[0].Dispose();
+	argy[1].Dispose();
+	m_updateCallback->Call(v8::Context::GetCurrent()->Global(), argc, argy);
 }

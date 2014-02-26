@@ -127,6 +127,9 @@ public:
 	b2Body* GetBodyList();
 	const b2Body* GetBodyList() const;
 
+	//iterate accross every body and call it's update callback @ben
+	void UpdateBodies() const;
+
 	/// Get the world joint list. With the returned joint, use b2Joint::GetNext to get
 	/// the next joint in the world list. A NULL joint indicates the end of the list.
 	/// @return the head of the world joint list.

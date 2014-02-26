@@ -14,6 +14,7 @@ using namespace v8;
 b2World *world;
 std::map<std::string, b2Body*> bodies;
 
+
 void sleep(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
@@ -107,22 +108,45 @@ Handle<Value> CreateWorld(const Arguments& args) {
 
 	// Construct a world object, which will hold and simulate the rigid bodies.
 	world = new b2World(gravity);
+
+	b2BodyDef groundBodyDef;
+	groundBodyDef.position.Set(0.0f, -10.0f);
+	b2Body* groundBody = world->CreateBody(&groundBodyDef);
+
+	// Define the ground box shape.
+	b2PolygonShape groundBox;
+
+	// The extents are the half-widths of the box.
+	groundBox.SetAsBox(50.0f, 10.0f);
+
+	// Add the ground fixture to the ground body.
+	groundBody->CreateFixture(&groundBox, 0.0f);
+
+	// Define the dynamic body. We set its position and call the body factory.
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(0.0f, 8.0f);
+	b2Body* body = world->CreateBody(&bodyDef);
+
 	return scope.Close(Undefined());
 }
 Handle<Value> CreateDynamicBody(const Arguments& args) {
 	HandleScope scope;
 	//get x and y and object name
-	float x = (Local<Number>::Cast(args[0]))->NumberValue();
-	float y = (Local<Number>::Cast(args[1]))->NumberValue();
+	float32 x = (Local<Number>::Cast(args[0]))->NumberValue();
+	float32 y = (Local<Number>::Cast(args[1]))->NumberValue();
 	v8::String::Utf8Value arg1(args[2]->ToString());
 	std::string name = std::string(*arg1);
-
+	
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x, y);
+
 	b2Body* body = world->CreateBody(&bodyDef);
-	
+
+	body->SetUpdateCallback(Persistent<Function>::New(Local<Function>::Cast(args[3])));
 	bodies.insert(std::make_pair(name, body));
+	
 	return scope.Close(Undefined());
 }
 
@@ -147,8 +171,8 @@ Handle<Value> AttachDynamicBoxFixture(const Arguments& args) {
 	//get height and width and object name
 	v8::String::Utf8Value arg0(args[0]->ToString());
 	std::string name = std::string(*arg0);
-	float width 		= (Local<Number>::Cast(args[1]))->NumberValue();
-	float height 		= (Local<Number>::Cast(args[2]))->NumberValue();
+	float32 width 		= (Local<Number>::Cast(args[1]))->NumberValue();
+	float32 height 		= (Local<Number>::Cast(args[2]))->NumberValue();
 	float x 			= (Local<Number>::Cast(args[3]))->NumberValue();
 	float y 			= (Local<Number>::Cast(args[4]))->NumberValue();
 	float theta 		= (Local<Number>::Cast(args[5]))->NumberValue();
@@ -166,16 +190,16 @@ Handle<Value> AttachDynamicBoxFixture(const Arguments& args) {
 
 		//create the shape
 		b2PolygonShape box;
-		box.SetAsBox(width/2, height/2, b2Vec2(x,y), theta);//divide by two since this takes half widths
+		box.SetAsBox(width/2, height/2 );//b2Vec2(,x,y), theta);//divide by two since this takes half widths
 		
 		//frame up the fixture definition
 		b2FixtureDef boxFixtureDefinition;
 
 		boxFixtureDefinition.shape 			= &box;
-		boxFixtureDefinition.density 		= density;
-		boxFixtureDefinition.friction 		= friction;
-		boxFixtureDefinition.restitution 	= restitution;
-		boxFixtureDefinition.isSensor 		= collidable;
+		// boxFixtureDefinition.density 		= density;
+		// boxFixtureDefinition.friction 		= friction;
+		// boxFixtureDefinition.restitution 	= restitution;
+		// boxFixtureDefinition.isSensor 		= collidable;
 		
 		//attach the fixture
 		body->CreateFixture(&boxFixtureDefinition);
@@ -194,6 +218,11 @@ Handle<Value> Tick(const Arguments& args) {
 	world->Step(timeStep, velocityIterations, positionIterations);
 	return scope.Close(Undefined());
 }
+Handle<Value> Update(const Arguments& args) {
+	HandleScope scope;
+	world->UpdateBodies();
+	return scope.Close(Undefined());
+}
 
 void init(Handle<Object> exports) {
 	exports->Set(String::NewSymbol("HelloWorld"),
@@ -201,11 +230,14 @@ void init(Handle<Object> exports) {
 
 	exports->Set(String::NewSymbol("CreateWorld"),
 		FunctionTemplate::New(CreateWorld)->GetFunction());
-
 	exports->Set(String::NewSymbol("CreateDynamicBody"),
 		FunctionTemplate::New(CreateDynamicBody)->GetFunction());
-	exports->Set(String::NewSymbol("AttachBoxFixture"),
+	exports->Set(String::NewSymbol("AttachDynamicBoxFixture"),
 		FunctionTemplate::New(AttachDynamicBoxFixture)->GetFunction());
+	exports->Set(String::NewSymbol("Tick"),
+		FunctionTemplate::New(Tick)->GetFunction());
+	exports->Set(String::NewSymbol("Update"),
+		FunctionTemplate::New(Update)->GetFunction());
 }
 
 NODE_MODULE(engine,init)

@@ -1337,3 +1337,11 @@ void b2World::Dump()
 	b2Log("joints = NULL;\n");
 	b2Log("bodies = NULL;\n");
 }
+
+void b2World::UpdateBodies() const {
+	const b2Body* bodyList = this->GetBodyList();
+	while (bodyList != NULL) {
+		bodyList->UpdatePosition();
+		bodyList = bodyList->GetNext();
+	}
+}

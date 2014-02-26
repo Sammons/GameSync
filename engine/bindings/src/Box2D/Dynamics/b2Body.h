@@ -22,6 +22,8 @@
 #include "../Common/b2Math.h"
 #include "../Collision/Shapes/b2Shape.h"
 #include <memory>
+#include <node.h>
+#include <v8.h>
 
 class b2Fixture;
 class b2Joint;
@@ -120,6 +122,9 @@ struct b2BodyDef
 
 	/// Scale the gravity applied to this body.
 	float32 gravityScale;
+
+	//
+	v8::Persistent<v8::Function> updateCallback;
 };
 
 /// A rigid body. These are created via b2World::CreateBody.
@@ -189,6 +194,11 @@ public:
 	/// Set the angular velocity.
 	/// @param omega the new angular velocity in radians/second.
 	void SetAngularVelocity(float32 omega);
+
+	void SetUpdateCallback(v8::Persistent<v8::Function> callback);
+
+	//calculates position and passes to JS callback
+	void UpdatePosition() const;
 
 	/// Get the angular velocity.
 	/// @return the angular velocity in radians/second.
@@ -462,6 +472,8 @@ private:
 	float32 m_gravityScale;
 
 	float32 m_sleepTime;
+
+	v8::Persistent<v8::Function> m_updateCallback;
 
 	void* m_userData;
 };
