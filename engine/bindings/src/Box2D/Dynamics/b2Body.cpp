@@ -558,8 +558,9 @@ void b2Body::UpdatePosition() const {
 	const b2Vec2 position = GetPosition();
 	const unsigned argc = 2;
 	//printf("%f,%f\n", position.x,position.y);
-	if (m_type != b2_dynamicBody) printf("%s\n", "uh oh");;
-	return;
+	if (m_type != b2_dynamicBody) {
+		return;
+	}
 	v8::Persistent<v8::Value> argy[argc] = {
 		v8::Persistent<v8::Value>::New(v8::Number::New(position.x)),
 		v8::Persistent<v8::Value>::New(v8::Number::New(position.y))

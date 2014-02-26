@@ -126,9 +126,9 @@ function Tick_Update() {
 	engine.Tick();
 }
 
-engine.CreateWorld();
+engine.CreateWorld(0,-10);
 //x,y,name
-var newBox = new Body(5,5,'first',true);
+var newBox = new Body(5,20,'first',true);
 createDynamicBody(newBox);
 //name, width, height, x, y, angle, density, friction, restitution;
 //engine.AttachBoxFixture('ok',5,5,0,0,0,1,0.3,0.1);
