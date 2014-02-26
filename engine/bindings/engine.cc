@@ -109,24 +109,24 @@ Handle<Value> CreateWorld(const Arguments& args) {
 	// Construct a world object, which will hold and simulate the rigid bodies.
 	world = new b2World(gravity);
 
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.0f, -10.0f);
-	b2Body* groundBody = world->CreateBody(&groundBodyDef);
+	// b2BodyDef groundBodyDef;
+	// groundBodyDef.position.Set(0.0f, -10.0f);
+	// b2Body* groundBody = world->CreateBody(&groundBodyDef);
 
-	// Define the ground box shape.
-	b2PolygonShape groundBox;
+	// // Define the ground box shape.
+	// b2PolygonShape groundBox;
 
-	// The extents are the half-widths of the box.
-	groundBox.SetAsBox(50.0f, 5.0f);
+	// // The extents are the half-widths of the box.
+	// groundBox.SetAsBox(50.0f, 5.0f);
 
-	// Add the ground fixture to the ground body.
-	groundBody->CreateFixture(&groundBox, 0.0f);
+	// // Add the ground fixture to the ground body.
+	// groundBody->CreateFixture(&groundBox, 0.0f);
 
-	// Define the dynamic body. We set its position and call the body factory.
-	b2BodyDef bodyDef;
-	//bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(0.0f, 8.0f);
-	b2Body* body = world->CreateBody(&bodyDef);
+	// // Define the dynamic body. We set its position and call the body factory.
+	// b2BodyDef bodyDef;
+	// //bodyDef.type = b2_dynamicBody;
+	// bodyDef.position.Set(0.0f, 8.0f);
+	// b2Body* body = world->CreateBody(&bodyDef);
 
 	return scope.Close(Undefined());
 }
@@ -144,7 +144,11 @@ Handle<Value> CreateDynamicBody(const Arguments& args) {
 
 	b2Body* body = world->CreateBody(&bodyDef);
 
-	body->SetUpdateCallback(Persistent<Function>::New(Local<Function>::Cast(args[3])));
+	body->SetCreateCallback(Persistent<Function>::New(Local<Function>::Cast(args[3])));
+	body->SetUpdateCallback(Persistent<Function>::New(Local<Function>::Cast(args[4])));
+	body->SetCollideCallback(Persistent<Function>::New(Local<Function>::Cast(args[5])));
+	body->SetDestroyCallback(Persistent<Function>::New(Local<Function>::Cast(args[6])));
+
 	bodies.insert(std::make_pair(name, body));
 	
 	return scope.Close(Undefined());
@@ -153,16 +157,22 @@ Handle<Value> CreateDynamicBody(const Arguments& args) {
 Handle<Value> CreateFixedBody(const Arguments& args) {
 	HandleScope scope;
 	//get x and y and object name
-	float x = (Local<Number>::Cast(args[0]))->NumberValue();
-	float y = (Local<Number>::Cast(args[1]))->NumberValue();
-	v8::String::Utf8Value arg2(args[2]->ToString());
-	std::string name = std::string(*arg2);
-
+	float32 x = (Local<Number>::Cast(args[0]))->NumberValue();
+	float32 y = (Local<Number>::Cast(args[1]))->NumberValue();
+	v8::String::Utf8Value arg1(args[2]->ToString());
+	std::string name = std::string(*arg1);
+	
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(x, y);
 	b2Body* body = world->CreateBody(&bodyDef);
+
+	body->SetCreateCallback(Persistent<Function>::New(Local<Function>::Cast(args[3])));
+	body->SetUpdateCallback(Persistent<Function>::New(Local<Function>::Cast(args[4])));
+	body->SetCollideCallback(Persistent<Function>::New(Local<Function>::Cast(args[5])));
+	body->SetDestroyCallback(Persistent<Function>::New(Local<Function>::Cast(args[6])));
 	
 	bodies.insert(std::make_pair(name, body));
+	
 	return scope.Close(Undefined());
 }
 //name, width, height, x, y, angle, density, friction, restitution
@@ -173,12 +183,12 @@ Handle<Value> AttachDynamicBoxFixture(const Arguments& args) {
 	std::string name = std::string(*arg0);
 	float32 width 		= (Local<Number>::Cast(args[1]))->NumberValue();
 	float32 height 		= (Local<Number>::Cast(args[2]))->NumberValue();
-	float x 			= (Local<Number>::Cast(args[3]))->NumberValue();
-	float y 			= (Local<Number>::Cast(args[4]))->NumberValue();
-	float theta 		= (Local<Number>::Cast(args[5]))->NumberValue();
-	float density 		= (Local<Number>::Cast(args[6]))->NumberValue();
-	float friction 		= (Local<Number>::Cast(args[7]))->NumberValue();
-	float restitution 	= (Local<Number>::Cast(args[8]))->NumberValue();
+	float32 x 			= (Local<Number>::Cast(args[3]))->NumberValue();
+	float32 y 			= (Local<Number>::Cast(args[4]))->NumberValue();
+	float32 theta 		= (Local<Number>::Cast(args[5]))->NumberValue();
+	float32 density 		= (Local<Number>::Cast(args[6]))->NumberValue();
+	float32 friction 		= (Local<Number>::Cast(args[7]))->NumberValue();
+	float32 restitution 	= (Local<Number>::Cast(args[8]))->NumberValue();
 	
 	bool collidable = true;
 	
@@ -196,13 +206,35 @@ Handle<Value> AttachDynamicBoxFixture(const Arguments& args) {
 		b2FixtureDef boxFixtureDefinition;
 
 		boxFixtureDefinition.shape 			= &box;
-		// boxFixtureDefinition.density 		= density;
-		// boxFixtureDefinition.friction 		= friction;
-		// boxFixtureDefinition.restitution 	= restitution;
-		// boxFixtureDefinition.isSensor 		= collidable;
+		boxFixtureDefinition.density 		= density;
+		boxFixtureDefinition.friction 		= friction;
+		boxFixtureDefinition.restitution 	= restitution;
+		//boxFixtureDefinition.isSensor 		= collidable;
 		
 		//attach the fixture
 		body->CreateFixture(&boxFixtureDefinition);
+	}
+	return scope.Close(Undefined());
+}
+Handle<Value> AttachFixedBoxFixture(const Arguments& args) {
+	HandleScope scope;
+
+	//get height and width and object name
+	v8::String::Utf8Value arg0(args[0]->ToString());
+	std::string name = std::string(*arg0);
+	float32 width 		= (Local<Number>::Cast(args[1]))->NumberValue();
+	float32 height 		= (Local<Number>::Cast(args[2]))->NumberValue();
+
+	auto bodies_iterator = bodies.find(name);
+	
+	if (bodies_iterator != bodies.end()) {
+		//get the body to attach to
+		auto body = bodies_iterator->second;//first is the string, second is the body
+
+		//create the shape
+		b2PolygonShape box;
+		box.SetAsBox(width/2, height/2 );//b2Vec2(,x,y), theta);//divide by two since this takes half widths
+		body->CreateFixture(&box,0);
 	}
 	return scope.Close(Undefined());
 }
@@ -232,8 +264,12 @@ void init(Handle<Object> exports) {
 		FunctionTemplate::New(CreateWorld)->GetFunction());
 	exports->Set(String::NewSymbol("CreateDynamicBody"),
 		FunctionTemplate::New(CreateDynamicBody)->GetFunction());
+	exports->Set(String::NewSymbol("CreateFixedBody"),
+		FunctionTemplate::New(CreateFixedBody)->GetFunction());
 	exports->Set(String::NewSymbol("AttachDynamicBoxFixture"),
 		FunctionTemplate::New(AttachDynamicBoxFixture)->GetFunction());
+	exports->Set(String::NewSymbol("AttachFixedBoxFixture"),
+		FunctionTemplate::New(AttachFixedBoxFixture)->GetFunction());//TODO
 	exports->Set(String::NewSymbol("Tick"),
 		FunctionTemplate::New(Tick)->GetFunction());
 	exports->Set(String::NewSymbol("Update"),

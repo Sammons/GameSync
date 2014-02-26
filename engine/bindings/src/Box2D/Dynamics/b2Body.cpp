@@ -109,6 +109,10 @@ b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 
 b2Body::~b2Body()
 {
+	m_createCallback.Dispose();
+	m_updateCallback.Dispose();
+	m_collideCallback.Dispose();
+	m_destroyCallback.Dispose();
 	// shapes and joints are destroyed in b2World::Destroy
 }
 
@@ -553,14 +557,20 @@ void b2Body::Dump()
 void b2Body::SetUpdateCallback(v8::Persistent<v8::Function> callback) {
 	m_updateCallback = callback;
 }
+void b2Body::SetCreateCallback(v8::Persistent<v8::Function> callback) {
+	m_createCallback = callback;
+}
+void b2Body::SetCollideCallback(v8::Persistent<v8::Function> callback) {
+	m_collideCallback = callback;
+}
+void b2Body::SetDestroyCallback(v8::Persistent<v8::Function> callback) {
+	m_destroyCallback = callback;
+}
 
 void b2Body::UpdatePosition() const {
 	const b2Vec2 position = GetPosition();
 	const unsigned argc = 2;
 	//printf("%f,%f\n", position.x,position.y);
-	if (m_type != b2_dynamicBody) {
-		return;
-	}
 	v8::Persistent<v8::Value> argy[argc] = {
 		v8::Persistent<v8::Value>::New(v8::Number::New(position.x)),
 		v8::Persistent<v8::Value>::New(v8::Number::New(position.y))

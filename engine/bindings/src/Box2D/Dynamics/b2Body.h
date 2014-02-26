@@ -124,7 +124,10 @@ struct b2BodyDef
 	float32 gravityScale;
 
 	//
+	v8::Persistent<v8::Function> createdCallback;
 	v8::Persistent<v8::Function> updateCallback;
+	v8::Persistent<v8::Function> collideCallback;
+	v8::Persistent<v8::Function> destroyCallback;
 };
 
 /// A rigid body. These are created via b2World::CreateBody.
@@ -196,6 +199,9 @@ public:
 	void SetAngularVelocity(float32 omega);
 
 	void SetUpdateCallback(v8::Persistent<v8::Function> callback);
+	void SetCreateCallback(v8::Persistent<v8::Function> callback);
+	void SetDestroyCallback(v8::Persistent<v8::Function> callback);
+	void SetCollideCallback(v8::Persistent<v8::Function> callback);
 
 	//calculates position and passes to JS callback
 	void UpdatePosition() const;
@@ -473,8 +479,10 @@ private:
 
 	float32 m_sleepTime;
 
+	v8::Persistent<v8::Function> m_createCallback;
 	v8::Persistent<v8::Function> m_updateCallback;
-
+	v8::Persistent<v8::Function> m_collideCallback;
+	v8::Persistent<v8::Function> m_destroyCallback;
 	void* m_userData;
 };
 
