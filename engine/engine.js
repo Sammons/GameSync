@@ -14,10 +14,11 @@ function createFixedBody( entity ) {
 	 function () {
 	 	entity.trigger('create');
 	 },
-	 function (x,y) {
+	 function (x,y,a) {
 	 	entity.pos.x = x;
 	 	entity.pos.y = y;
-	 	entity.trigger('update',x,y);
+	 	entity.pos.a = a;
+	 	entity.trigger('update',x,y,a);
 	 },
 	 function (myID,theirID) {
  		entity.trigger('collide',myID,theirID);
@@ -36,10 +37,11 @@ function createDynamicBody(entity ) {
 	 function () {
 	 	entity.trigger('create');
 	 },
-	 function (x,y) {
+	 function (x,y,a) {
 	 	entity.pos.x = x;
 	 	entity.pos.y = y;
-	 	entity.trigger('update',x,y);
+	 	entity.pos.a = a;
+	 	entity.trigger('update',x,y,a);
 	 },
 	 function (myID,theirID) {
  		entity.trigger('collide',myID,theirID);
@@ -143,25 +145,30 @@ function Body(posX, posY, name, dynamic) {
 }
 
 
-function Tick_Update() {
-	
-	engine.Tick();
+exports.body = Body;
+exports.createWorld = function(gravityX,gravityY) {
+	engine.CreateWorld(gravityX,gravityY);	
 }
+exports.tick = engine.Tick;
+exports.update =engine.Update;
 
-engine.CreateWorld(0,-10);
-//x,y,name
-var newBox = new Body(5,20,'first',true);
-newBox.addBoxFixture(20,1)
+exports.test = function() {
+	exports.createWorld(0,-10);
+	//the beam should wack the pivot and spin off
 
-var floor = new Body(0,-10,'floor',false);
-floor.addBoxFixture(1,5);
-floor.onupdate(function(x,y) {
-	//console.log(x,y);
-})
-newBox.onupdate(function(x,y) {
-	console.log(x,y);
-});
-for (var i = 500- 1; i >= 0; i--) {
-	Tick_Update();
-	if (i%20==0) engine.Update();
-};
+	var beam = new exports.body(10,50,'beam',true);
+	beam.addBoxFixture(20,1);
+
+	var pivot = new exports.body(0,-5,'block',false);
+	pivot.addBoxFixture(5,5);
+
+	beam.bind('update',function(x,y,a) {
+		console.log('x:',x,'y:',y,'theta:',a);
+	})
+	exports.update();
+	for (var i = 500 - 1; i >= 0; i--) {
+		exports.tick();
+	};
+	exports.update();
+}
+//exports.test();

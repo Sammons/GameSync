@@ -133,14 +133,19 @@ $(document).ready(function() {
 
 	setInterval(function() {
 		console.log(State);
-		renderBox(State.x,State.y)
+		renderBox(State.x,State.y,State.a)
 	},2);
 
 	/*  warm up rendering  */
-	function renderBox(x,y) {
+	function renderBox(x,y,a) {
+		var width = 100;
 		Context.clearRect(0,0,500,500);
 		Context.fillStyle='rgb(0,0,0)';
-		Context.fillRect(x,y,10,10);
+		Context.fillRect(55,500-105,10,10);
+		Context.setTransform(Math.cos(a), Math.sin(a), -Math.sin(a), Math.cos(a),x,y);
+		Context.fillRect(-(width/2),-2,(width/2)+10,4);
+		Context.setTransform(1,0,0,1,0,0);
+
 	}	
 })
 

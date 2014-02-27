@@ -569,13 +569,16 @@ void b2Body::SetDestroyCallback(v8::Persistent<v8::Function> callback) {
 
 void b2Body::UpdatePosition() const {
 	const b2Vec2 position = GetPosition();
-	const unsigned argc = 2;
-	//printf("%f,%f\n", position.x,position.y);
-	v8::Persistent<v8::Value> argy[argc] = {
+	const float32 angle = GetAngle();
+	const unsigned argc = 3;
+
+	v8::Persistent<v8::Value> args[argc] = {
 		v8::Persistent<v8::Value>::New(v8::Number::New(position.x)),
-		v8::Persistent<v8::Value>::New(v8::Number::New(position.y))
+		v8::Persistent<v8::Value>::New(v8::Number::New(position.y)),
+		v8::Persistent<v8::Value>::New(v8::Number::New(angle))
 	};
-	argy[0].Dispose();
-	argy[1].Dispose();
-	m_updateCallback->Call(v8::Context::GetCurrent()->Global(), argc, argy);
+	m_updateCallback->Call(v8::Context::GetCurrent()->Global(), argc, args);
+	args[0].Dispose();
+	args[1].Dispose();
+	args[2].Dispose();
 }
