@@ -69,6 +69,11 @@ struct b2BodyDef
 		type = b2_staticBody;
 		active = true;
 		gravityScale = 1.0f;
+		//INITIALIZE TODO
+		// createdCallback;
+		// updateCallback;
+		// collideCallback;
+		// destroyCallback;
 	}
 
 	/// The body type: static, kinematic, or dynamic.
@@ -124,7 +129,7 @@ struct b2BodyDef
 	float32 gravityScale;
 
 	//
-	v8::Persistent<v8::Function> createdCallback;
+	v8::Persistent<v8::Function> createCallback;
 	v8::Persistent<v8::Function> updateCallback;
 	v8::Persistent<v8::Function> collideCallback;
 	v8::Persistent<v8::Function> destroyCallback;
@@ -197,11 +202,6 @@ public:
 	/// Set the angular velocity.
 	/// @param omega the new angular velocity in radians/second.
 	void SetAngularVelocity(float32 omega);
-
-	void SetUpdateCallback(v8::Persistent<v8::Function> callback);
-	void SetCreateCallback(v8::Persistent<v8::Function> callback);
-	void SetDestroyCallback(v8::Persistent<v8::Function> callback);
-	void SetCollideCallback(v8::Persistent<v8::Function> callback);
 
 	//calculates position and passes to JS callback
 	void UpdatePosition() const;

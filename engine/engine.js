@@ -171,4 +171,4 @@ exports.test = function() {
 	};
 	exports.update();
 }
-//exports.test();
+exports.test();

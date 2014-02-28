@@ -105,6 +105,11 @@ b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 
 	m_fixtureList = NULL;
 	m_fixtureCount = 0;
+
+	m_createCallback  = bd -> createCallback  ;
+	m_updateCallback  = bd -> updateCallback  ;
+	m_collideCallback = bd -> collideCallback ;
+	m_destroyCallback = bd -> destroyCallback ;
 }
 
 b2Body::~b2Body()
@@ -552,19 +557,6 @@ void b2Body::Dump()
 		b2Log("  }\n");
 	}
 	b2Log("}\n");
-}
-
-void b2Body::SetUpdateCallback(v8::Persistent<v8::Function> callback) {
-	m_updateCallback = callback;
-}
-void b2Body::SetCreateCallback(v8::Persistent<v8::Function> callback) {
-	m_createCallback = callback;
-}
-void b2Body::SetCollideCallback(v8::Persistent<v8::Function> callback) {
-	m_collideCallback = callback;
-}
-void b2Body::SetDestroyCallback(v8::Persistent<v8::Function> callback) {
-	m_destroyCallback = callback;
 }
 
 void b2Body::UpdatePosition() const {
