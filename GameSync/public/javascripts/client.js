@@ -114,7 +114,7 @@ $(document).ready(function() {
 	var Settings = {};
 	var Canvas = document.getElementById('canvas');
 	var Context = Canvas.getContext('2d');
-
+	// $(Canvas).rotate(180);
 	socket.on('welcome',function(data) {
 		Settings = BISON.decode(data).settings;
 		socket.emit('welcome',BISON.encode({'response':'thanks!'}));
@@ -141,9 +141,10 @@ $(document).ready(function() {
 		var width = 100;
 		Context.clearRect(0,0,500,500);
 		Context.fillStyle = 'rgb(0,0,0)';
-		Context.fillRect(55,500-105,10,10);
-		Context.setTransform(Math.cos(a), Math.sin(a), -Math.sin(a), Math.cos(a),x,y);
-		Context.fillRect(-(width/2),-2,(width/2)+10,4);
+		Context.fillRect(255,0,50,50);
+		a = -a;
+		Context.setTransform(Math.cos(a), -Math.sin(a), Math.sin(a), Math.cos(a),x,y);
+		Context.fillRect(-50,-2,100,4);
 		Context.setTransform(1,0,0,1,0,0);
 
 	}	

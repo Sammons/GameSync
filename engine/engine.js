@@ -2,7 +2,7 @@ var engine = require('./bindings/build/Release/engine');
 engine.bodies = [];
 
 function createWorld (gravityX, gravityY){
-	engine.CreateWorld();
+	engine.CreateWorld(gravityX, gravityY);
 };
 
 function createFixedBody( entity ) {
@@ -134,41 +134,20 @@ function Body(posX, posY, name, dynamic) {
 			engine.AttachDynamicBoxFixture(
 				this.name,
 				width,
-				height,
-				0,0,0,1,0.3,0.3);
+				height,1,0.3,0.3);
 		} else {
 			engine.AttachFixedBoxFixture(this.name,width,height)
 		}
 	}
-	if (this.dynamic==true)createDynamicBody(this);
+
+	if (this.dynamic==true) createDynamicBody(this);
 	else createFixedBody(this);
 }
 
 
 exports.body = Body;
-exports.createWorld = function(gravityX,gravityY) {
-	engine.CreateWorld(gravityX,gravityY);	
-}
+exports.createWorld = createWorld;
 exports.tick = engine.Tick;
-exports.update =engine.Update;
+exports.update = engine.Update;
 
-exports.test = function() {
-	exports.createWorld(0,-10);
-	//the beam should wack the pivot and spin off
 
-	var beam = new exports.body(10,50,'beam',true);
-	beam.addBoxFixture(20,1);
-
-	var pivot = new exports.body(0,-5,'block',false);
-	pivot.addBoxFixture(5,5);
-
-	beam.bind('update',function(x,y,a) {
-		console.log('x:',x,'y:',y,'theta:',a);
-	})
-	exports.update();
-	for (var i = 500 - 1; i >= 0; i--) {
-		exports.tick();
-	};
-	exports.update();
-}
-exports.test();

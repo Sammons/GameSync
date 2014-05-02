@@ -12,8 +12,5 @@ namespace helpers {
 	    while (goal > clock());
 	}
 
-	bool assert_argument_count(const Arguments& args, int count) {
-		return (args.Length() == count);
-	}
 
 }
