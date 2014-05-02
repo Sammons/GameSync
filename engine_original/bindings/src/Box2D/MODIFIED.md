@@ -1,0 +1,1 @@
+This is a statement by Ben Sammons that the Box2d.cpp code here is modified, and is not the original source - files modified within should be marked, but admittedly some of them may have been missed.
