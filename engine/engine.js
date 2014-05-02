@@ -1,12 +1,11 @@
 var engine = require('./bindings/build/Release/engine');
-engine.bodies = [];
+var bodies = [];
 
 function createWorld (gravityX, gravityY){
 	engine.CreateWorld(gravityX, gravityY);
 };
 
 function createFixedBody( entity ) {
-
 	engine.CreateFixedBody(
 	 entity.pos.x,
 	 entity.pos.y,
@@ -29,7 +28,6 @@ function createFixedBody( entity ) {
 }
 
 function createDynamicBody(entity ) {
-
 	engine.CreateDynamicBody(
 	 entity.pos.x,
 	 entity.pos.y,
@@ -52,7 +50,7 @@ function createDynamicBody(entity ) {
 
 }
 
-function Body(posX, posY, name, dynamic) {
+var Body = function(posX, posY, name, dynamic) {
 	this.name = name;
 	this.pos = {x: posX, y: posY, angle:0};//TODO: add angle to construction of bodies
 	this.dynamic = (dynamic ? true : false);
@@ -138,10 +136,14 @@ function Body(posX, posY, name, dynamic) {
 		} else {
 			engine.AttachFixedBoxFixture(this.name,width,height)
 		}
+		this.width = width;
+		this.height = height;
 	}
 
 	if (this.dynamic==true) createDynamicBody(this);
 	else createFixedBody(this);
+
+	bodies.push(this);
 }
 
 
@@ -149,5 +151,6 @@ exports.body = Body;
 exports.createWorld = createWorld;
 exports.tick = engine.Tick;
 exports.update = engine.Update;
+exports.bodies = bodies;
 
 

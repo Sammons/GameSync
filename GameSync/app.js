@@ -7,6 +7,13 @@ process.nextTick(function() {
 		box.addBoxFixture(50,4);
 
 
+		var box2 = new engine.body(250,400,'box2',true);
+		box2.addBoxFixture(50,4);
+
+
+		var box3 = new engine.body(250,300,'box3',true);
+		box3.addBoxFixture(50,4);
+
 		var pivot = new engine.body(290,25,'pivot',false);
 		pivot.addBoxFixture(50,50);
 		// socketServer.broadcast({who: 'pivot', x: 250, y: 0});
@@ -15,9 +22,7 @@ process.nextTick(function() {
 		actualFloor.addBoxFixture(1000,2);
 
 		box.bind('update',function(x,y,a) {
-			// console.log(x,y,a);
-			// console.log(x,y,a)
-			socketServer.broadcast({who: 'box', 'x':x, 'y':y, 'a':a, stat: false});
+			
 		});
 
 		setInterval(function() {
@@ -25,6 +30,7 @@ process.nextTick(function() {
 		},5);
 		setInterval(function() {
 			engine.update();
+			socketServer.broadcast(engine.bodies);
 		},40);
 });
 
