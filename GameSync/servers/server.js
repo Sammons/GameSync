@@ -13,12 +13,13 @@ exports.initialize = function() {
 	app.use(app.router);
 	app.use(express.static('./public'));
 
-	app.get('/', routes.index);
+	app.get('/', routes.test);
 	app.get('/test', routes.test);
 
 	var server = http.createServer(app);
 	server.listen(app.get('port'), function(){
 	  console.log('Express server listening on port ' + app.get('port'));
 	});
+	server.app = app;
 	return server;
 }

@@ -25,7 +25,10 @@
 	<script type="text/javascript" src="javascripts/client.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(e) {
-		
+		$('#canvas').click(function(e){
+			$.get( '/create/'+(e.pageX - $(this).offset().left)+ '/' +
+				(500 - e.pageY - $(this).offset().top) )
+		})
 	});
 	</script>
 </head>

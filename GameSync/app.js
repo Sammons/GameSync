@@ -3,16 +3,6 @@ var socketServer 	= require('./servers/socket-server.js').initialize(server);
 var engine			= require('../engine/engine.js');
 process.nextTick(function() {
 	engine.createWorld(0,-9.8);
-		var box = new engine.body(250,500,'box',true);
-		box.addBoxFixture(50,4);
-
-
-		var box2 = new engine.body(250,400,'box2',true);
-		box2.addBoxFixture(50,4);
-
-
-		var box3 = new engine.body(250,300,'box3',true);
-		box3.addBoxFixture(50,4);
 
 		var pivot = new engine.body(290,25,'pivot',false);
 		pivot.addBoxFixture(50,50);
@@ -21,9 +11,13 @@ process.nextTick(function() {
 		var actualFloor = new engine.body(250,0,'boundary',false);
 		actualFloor.addBoxFixture(1000,2);
 
-		box.bind('update',function(x,y,a) {
-			
-		});
+		var box_counter = 0;
+		server.app.get('/create/:x/:y',function(req,res){
+					box_counter++;
+					var box = new engine.body(req.params.x/1,req.params.y/1,'box-'+box_counter,true);
+					box.addBoxFixture(50,4);
+					res.end();
+		})
 
 		setInterval(function() {
 			engine.tick();
