@@ -20,7 +20,7 @@ exports.initialize = function(app) {
 	return io;
 }
 
-function screamDisconnected() {console.log("damn, I'm out");}
+function screamDisconnected() {console.log("I'm out");}
 function screamError(e) {console.log("something broke",e);}
 function tryFunc(func,errorHandler) {
 	try {

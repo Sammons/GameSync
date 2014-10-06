@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-	var socket = io.connect('http://localhost:3000');
+	var socket = io.connect('http://162.243.131.246:8000');
 	var Settings = {};
 	var Canvas = document.getElementById('canvas');
 	var Context = Canvas.getContext('2d');
